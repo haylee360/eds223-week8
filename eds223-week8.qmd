@@ -1,0 +1,35 @@
+---
+title: "Week 8 eds 223"
+format: html
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+## 1. Load libraries
+
+```{r}
+library(terra)
+library(sf)
+library(tidyverse)
+library(here)
+library(tmap)
+```
+
+## 2. Create a function to compute NDVI
+
+```{r}
+ndvi_fun <- function(nir, red){
+  (nir - red) / (nir + red)
+}
+```
+
+## 3. Compute NDVI for a single scene
+
+```{r}
+landsat_20180612 <- rast(here("data", "landsat_20180612.tif"))
+
+names(landsat_20180612) <- c("blue", "green", "red", "NIR", "SWIR1", "SWIR2")
+
+ndvi_20180612 <- lapp(landsat_20180612[[c(4, 3)]], fun = ndvi_fun)
+```
